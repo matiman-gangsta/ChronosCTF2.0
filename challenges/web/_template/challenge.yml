@@ -1,0 +1,42 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "Template Web Challenge"
+author: "DevOps Team"
+category: "web"
+description: |
+  Bienvenido al reto de plantilla para la categoría Web de ChronosCTF 2026.
+  
+  Explora el servicio web expuesto, analiza las rutas de la aplicación y recupera la bandera oculta.
+  
+  **Servicio expuesto:** `http://<TARGET_IP>:8000`
+
+value: 500
+type: standard
+
+# Dificultad del reto: intro, easy, medium, hard, insane
+extra:
+  difficulty: "easy"
+
+# Banderas aceptadas
+flags:
+  - CHRONOS{d3fault_fl4g_f0r_t3mplat3_ch4ll3ng3}
+
+# Temas / Etiquetas
+tags:
+  - web
+  - beginner
+  - python
+  - flask
+
+# Estado del reto: visible | hidden
+state: visible
+
+# Archivos descargables para los participantes (opcional)
+# files:
+#   - dist/app.py
+
+# Requisitos previos (desbloqueo condicional de retos)
+# requirements:
+#   - "Sanity Check"

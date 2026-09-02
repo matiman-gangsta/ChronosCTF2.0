@@ -1,0 +1,66 @@
+name: "Terraform Plan (CI)"
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "terraform/**"
+      - "scripts/**"
+
+permissions:
+  id-token: write      # Requerido para autenticación OIDC con Azure
+  contents: read       # Requerido para hacer checkout del código
+  pull-requests: write # Permite publicar el resumen de terraform plan como comentario en el PR
+
+jobs:
+  plan:
+    name: "Validate & Terraform Plan"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "Azure Login via OIDC"
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: "Setup Terraform"
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.5"
+
+      - name: "Terraform Format Check"
+        id: fmt
+        run: terraform fmt -check -diff
+
+      - name: "Terraform Init"
+        id: init
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ secrets.TF_STATE_RG }}" \
+            -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" \
+            -backend-config="container_name=${{ secrets.TF_STATE_CONTAINER }}" \
+            -backend-config="key=prod.terraform.tfstate" \
+            -backend-config="use_oidc=true"
+
+      - name: "Terraform Validate"
+        id: validate
+        run: terraform validate -no-color
+
+      - name: "Terraform Plan"
+        id: plan
+        run: |
+          terraform plan -no-color -out=tfplan
+        continue-on-error: false
+
+      - name: "Show Plan Summary"
+        run: |
+          terraform show -no-color tfplan | head -n 100

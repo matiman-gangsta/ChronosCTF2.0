@@ -1,0 +1,122 @@
+name: "Build & Validate Challenges (CI)"
+
+on:
+  pull_request:
+    paths:
+      - "challenges/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "challenges/**"
+
+permissions:
+  contents: read
+
+jobs:
+  detect-and-build:
+    name: "Build & Lint Modified Challenges"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: "Set up Docker Buildx"
+        uses: docker/setup-buildx-action@v3
+
+      - name: "Detect Modified Challenges"
+        id: filter
+        run: |
+          echo "=== Detectando carpetas de retos modificadas ==="
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # Comparar contra la base del PR
+            CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- 'challenges/**')
+          else
+            # Comparar contra el commit anterior en push
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD -- 'challenges/**' 2>/dev/null || find challenges -type f)
+          fi
+
+          # Extraer directorios únicos que contengan un Dockerfile
+          CHALLENGE_DIRS=$(echo "$CHANGED_FILES" | grep -v '^$' | while read -r file; do
+            dir=$(dirname "$file")
+            # Subir en el árbol de directorios hasta encontrar un Dockerfile
+            while [ "$dir" != "challenges" ] && [ "$dir" != "." ]; do
+              if [ -f "$dir/Dockerfile" ]; then
+                echo "$dir"
+                break
+              fi
+              dir=$(dirname "$dir")
+            done
+          done | sort -u)
+
+          if [ -z "$CHALLENGE_DIRS" ]; then
+            echo "No se detectaron Dockerfiles modificados. Validando template por defecto..."
+            CHALLENGE_DIRS="challenges/web/_template"
+          fi
+
+          echo "Directorios a compilar y validar:"
+          echo "$CHALLENGE_DIRS"
+          
+          # Guardar para el siguiente paso
+          echo "dirs<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHALLENGE_DIRS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: "Validate Metadata & Build Docker Images"
+        run: |
+          FAILED=0
+          while IFS= read -r dir; do
+            [ -z "$dir" ] && continue
+            echo "============================================================"
+            echo ">>> Evaluando reto en: $dir"
+            echo "============================================================"
+
+            # 1. Validar presencia de metadatos CTFd (challenge.yml)
+            if [ ! -f "$dir/challenge.yml" ]; then
+              echo "❌ ERROR: Falta archivo de metadatos obligatorio: $dir/challenge.yml"
+              FAILED=1
+            else
+              echo "✅ challenge.yml detectado."
+            fi
+
+            # 2. Validar presencia de writeup oficial (solution.md)
+            if [ ! -f "$dir/solution.md" ]; then
+              echo "❌ ERROR: Falta archivo de solución obligatorio: $dir/solution.md"
+              FAILED=1
+            else
+              echo "✅ solution.md detectado."
+            fi
+
+            # 3. Compilar imagen Docker
+            CHALLENGE_TAG=$(echo "$dir" | tr '/' '-' | tr '[:upper:]' '[:lower:]')
+            echo "🐳 Compilando imagen Docker: ctf-challenge-$CHALLENGE_TAG..."
+            
+            if docker build -t "ctf-challenge-$CHALLENGE_TAG:test" "$dir"; then
+              echo "✅ Docker build exitoso para $dir."
+            else
+              echo "❌ ERROR: Falló docker build en $dir."
+              FAILED=1
+              continue
+            fi
+
+            # 4. Validar política de seguridad: Usuario No-Root
+            IMAGE_USER=$(docker image inspect "ctf-challenge-$CHALLENGE_TAG:test" --format '{{.Config.User}}')
+            echo "🔍 Usuario configurado en contenedor: '$IMAGE_USER'"
+            if [ -z "$IMAGE_USER" ] || [ "$IMAGE_USER" = "root" ] || [ "$IMAGE_USER" = "0" ]; then
+              echo "❌ ERROR DE SEGURIDAD: El contenedor en $dir no define un usuario no-root en Dockerfile (encontrado: '$IMAGE_USER')."
+              FAILED=1
+            else
+              echo "✅ Verificación de usuario no-root aprobada ('$IMAGE_USER')."
+            fi
+
+          done <<< "${{ steps.filter.outputs.dirs }}"
+
+          if [ $FAILED -ne 0 ]; then
+            echo "=== La validación de retos falló con errores. Revisa los logs anteriores. ==="
+            exit 1
+          fi
+
+          echo "=== Todos los retos compilaron y superaron las pruebas de seguridad con éxito ==="
