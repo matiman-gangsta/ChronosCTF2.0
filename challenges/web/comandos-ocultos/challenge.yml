@@ -1,0 +1,36 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "Comandos Ocultos"
+author: "Chronos Security Team"
+category: "web"
+description: |
+  **PingTool Pro** es una utilidad interna desarrollada por el equipo de redes para diagnosticar la conectividad de los servidores.
+  
+  Los administradores afirman que su nuevo WAF perimetral bloquea cualquier intento de inyección de comandos en el sistema.
+  
+  ¿Serás capaz de eludir las restricciones del filtro y recuperar el contenido secreto del archivo `/flag`?
+  
+  **Servicio expuesto:** `http://<TARGET_IP>:8005`
+
+value: 500
+type: standard
+
+# Dificultad del reto: intro, easy, medium, hard, insane
+extra:
+  difficulty: "medium"
+
+# Banderas aceptadas
+flags:
+  - CHRONOS{w4f_byp4ss_ifs_4nd_w1ldc4rds_8842}
+
+# Temas / Etiquetas
+tags:
+  - web
+  - command-injection
+  - waf-bypass
+  - bash-internals
+
+# Estado del reto: visible | hidden
+state: visible

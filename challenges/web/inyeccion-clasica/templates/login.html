@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Acceso | Northstar{% endblock %}
+{% block content %}
+<section class="login-layout">
+  <div class="intro">
+    <div class="brand"><span class="brand-mark">N</span> NORTHSTAR</div>
+    <p class="eyebrow">INTERNAL OPERATIONS // AUTH GATEWAY</p>
+    <h1>Todo sistema deja una <em>puerta</em>.</h1>
+    <p class="lede">
+      El portal heredado sigue en línea mientras el equipo termina su auditoría.
+      Encuentra una forma de entrar como administrador.
+    </p>
+    <div class="status-line"><span></span> Nodo de autenticación disponible</div>
+  </div>
+
+  <div class="card">
+    <div class="card-top">
+      <span>AUTH/01</span>
+      <span class="signal">● ONLINE</span>
+    </div>
+    <h2>Identifícate</h2>
+    <p class="muted">Usa tus credenciales corporativas.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert {{ category }}" role="alert">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('login') }}" autocomplete="off">
+      <label for="username">Usuario</label>
+      <input id="username" name="username" type="text" placeholder="nombre.apellido" required autofocus>
+
+      <label for="password">Contraseña</label>
+      <input id="password" name="password" type="password" placeholder="••••••••••••" required>
+
+      <button type="submit">ACCEDER <span>→</span></button>
+    </form>
+
+    <p class="footnote">Acceso monitorizado · Build legacy-4.2</p>
+  </div>
+</section>
+{% endblock %}

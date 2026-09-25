@@ -1,0 +1,8 @@
+.git
+.gitignore
+.dockerignore
+*.zip
+SOLUTION.md
+*.log
+*.hash
+shadow.request

@@ -1,0 +1,21 @@
+# Secretos y archivos generados durante la práctica
+.env
+*.log
+*.hash
+shadow.request
+archivist_id_ed25519
+*.zip
+
+# Desarrollo
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

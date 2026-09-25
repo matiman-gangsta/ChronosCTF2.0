@@ -1,12 +1,14 @@
 name: "Build & Validate Challenges (CI)"
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - "challenges/**"
   push:
     branches:
       - main
+      - development
     paths:
       - "challenges/**"
 
@@ -34,6 +36,9 @@ jobs:
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             # Comparar contra la base del PR
             CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD -- 'challenges/**')
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # En ejecución manual, evaluar todos los retos
+            CHANGED_FILES=$(find challenges -type f)
           else
             # Comparar contra el commit anterior en push
             CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD -- 'challenges/**' 2>/dev/null || find challenges -type f)
@@ -106,8 +111,13 @@ jobs:
             IMAGE_USER=$(docker image inspect "ctf-challenge-$CHALLENGE_TAG:test" --format '{{.Config.User}}')
             echo "🔍 Usuario configurado en contenedor: '$IMAGE_USER'"
             if [ -z "$IMAGE_USER" ] || [ "$IMAGE_USER" = "root" ] || [ "$IMAGE_USER" = "0" ]; then
-              echo "❌ ERROR DE SEGURIDAD: El contenedor en $dir no define un usuario no-root en Dockerfile (encontrado: '$IMAGE_USER')."
-              FAILED=1
+              # Permitir excepciones si el reto está explícitamente etiquetado como privesc / suid
+              if grep -Eq '^\s*-\s*(privesc|suid)' "$dir/challenge.yml" 2>/dev/null; then
+                echo "⚠️ AVISO: Reto clasificado con etiqueta 'privesc/suid' en challenge.yml. Se permite arranque privilegiado para escalada local intencionada."
+              else
+                echo "❌ ERROR DE SEGURIDAD: El contenedor en $dir no define un usuario no-root en Dockerfile (encontrado: '$IMAGE_USER')."
+                FAILED=1
+              fi
             else
               echo "✅ Verificación de usuario no-root aprobada ('$IMAGE_USER')."
             fi

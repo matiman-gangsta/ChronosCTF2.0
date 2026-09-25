@@ -1,0 +1,9 @@
+INFRASTRUCTURE NOTES // 2026-Q3
+================================
+
+- El nodo documental continúa utilizando el resolver heredado.
+- La raíz configurada para archivos públicos es /archive/public/.
+- Las rutas solicitadas se registran antes de enviarse al backend.
+- La migración al nuevo sistema de almacenamiento sigue pendiente.
+
+Responsable: Platform Operations

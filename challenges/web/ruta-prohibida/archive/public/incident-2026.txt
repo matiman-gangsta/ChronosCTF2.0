@@ -1,0 +1,10 @@
+INCIDENT REPORT #041
+====================
+
+Estado: MITIGADO
+Severidad: MEDIA
+
+Durante una revisión se detectaron solicitudes con secuencias de navegación
+relativa. El equipo aplicó una restricción de extensiones al visor legado.
+
+La validación del directorio raíz queda pendiente para la siguiente revisión.

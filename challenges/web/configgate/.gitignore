@@ -1,0 +1,23 @@
+# Secretos y archivos locales
+.env
+*.log
+
+# Herramientas de desarrollo
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Payloads creados durante la práctica
+payload.conf
+root.txt
+user.txt
+*.zip
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

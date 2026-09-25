@@ -134,7 +134,7 @@ services:
           memory: 1536M
 
   db:
-    image: mariadb:10.11-focal
+    image: mariadb:10.11
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}

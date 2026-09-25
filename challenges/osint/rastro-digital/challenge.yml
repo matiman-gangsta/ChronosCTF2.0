@@ -1,0 +1,36 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "Rastro Digital"
+author: "Chronos Incident Response Team"
+category: "osint"
+description: |
+  ChronosCorp tuvo un incidente de seguridad interno: un desarrollador novato subió credenciales sensibles a un repositorio de pruebas y luego intentó borrarlas en un commit posterior...
+  
+  Pero en el control de versiones, Git nunca olvida.
+  
+  Investiga el historial y descubre qué se filtró.
+  
+  **Archivo para descargar:** `chronoscorp-deploy-scripts.zip`
+
+value: 300
+type: standard
+
+extra:
+  difficulty: "easy"
+
+flags:
+  - FLAG{git_commit_history_never_dies_1636}
+  - CHRONOS{git_commit_history_never_dies_1636}
+
+tags:
+  - osint
+  - git
+  - forensics
+  - version-control
+
+files:
+  - chronoscorp-deploy-scripts.zip
+
+state: visible

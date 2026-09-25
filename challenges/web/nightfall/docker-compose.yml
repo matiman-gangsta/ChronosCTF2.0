@@ -1,0 +1,10 @@
+services:
+  nightfall:
+    build: .
+    container_name: chronos_challenge_nightfall
+    ports:
+      - "9001:80"
+      - "2222:22"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped

@@ -1,0 +1,34 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "El Secreto del Logo"
+author: "Marketing / Forensics Team"
+category: "forense"
+description: |
+  El equipo de marketing de ChronosCorp publicó el nuevo logo institucional, pero alguien dejó algo en la imagen que no debería estar ahí.
+  
+  Revisa bien los metadatos y la estructura de la imagen; no todo está a simple vista.
+  
+  **Archivo para descargar:** `chronos_logo.jpg`
+
+value: 200
+type: standard
+
+extra:
+  difficulty: "easy"
+
+flags:
+  - FLAG{exif_metadata_hidden_2026_0913}
+  - CHRONOS{exif_metadata_hidden_2026_0913}
+
+tags:
+  - forense
+  - exif
+  - metadata
+  - stego
+
+files:
+  - chronos_logo.jpg
+
+state: visible

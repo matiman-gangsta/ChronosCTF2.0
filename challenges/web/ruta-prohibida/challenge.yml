@@ -1,0 +1,32 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "Ruta Prohibida"
+author: "Chronos Web Team"
+category: "web"
+description: |
+  El nodo documental de la corporación dispone de un visor web para consultar archivos y notas públicas en formato texto.
+  
+  Aunque la aplicación intenta restringir el acceso exigiendo la extensión `.txt`, la resolución de rutas relativas no fue correctamente sanitizada.
+  
+  Explora el sistema de archivos del servidor y recupera la bandera ubicada en la raíz de la aplicación.
+  
+  **Servicio expuesto:** `http://<TARGET_IP>:8010`
+
+value: 300
+type: standard
+
+extra:
+  difficulty: "easy"
+
+flags:
+  - CHRONOS{lfi_directory_traversal_flag_0346}
+
+tags:
+  - web
+  - path-traversal
+  - lfi
+  - input-validation
+
+state: visible

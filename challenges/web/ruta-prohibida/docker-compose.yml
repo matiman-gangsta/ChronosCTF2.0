@@ -1,0 +1,7 @@
+services:
+  ruta-prohibida:
+    build: .
+    container_name: chronos_challenge_ruta_prohibida
+    ports:
+      - "8010:5000"
+    restart: unless-stopped

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Ruta Prohibida | Aster Archive{% endblock %}
+{% block content %}
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">A</span>
+      <div><strong>ASTER</strong><small>DOCUMENT ARCHIVE</small></div>
+    </div>
+
+    <div class="classification">INTERNAL // CONTROLLED</div>
+
+    <nav aria-label="Documentos disponibles">
+      <p class="nav-label">ARCHIVOS RECIENTES</p>
+      {% for document in documents %}
+        <a class="document-link {% if requested_file == document.name %}active{% endif %}"
+           href="{{ url_for('index', view=document.name) }}">
+          <span class="file-glyph">TXT</span>
+          <span>
+            <strong>{{ document.title }}</strong>
+            <small>{{ document.tag }}</small>
+          </span>
+        </a>
+      {% endfor %}
+    </nav>
+
+    <div class="system-info">
+      <span class="pulse"></span>
+      <div><strong>ARCHIVE NODE 03</strong><small>Resolver service online</small></div>
+    </div>
+  </aside>
+
+  <main class="workspace">
+    <header>
+      <div>
+        <p class="eyebrow">SECURE FILE VIEWER / REV. 1.4</p>
+        <h1>Visor de documentos</h1>
+      </div>
+      <div class="clearance"><span>NIVEL</span><strong>02</strong></div>
+    </header>
+
+    <section class="path-bar">
+      <span>REQUESTED RESOURCE</span>
+      <code>/archive/public/{{ requested_file }}</code>
+    </section>
+
+    <section class="viewer">
+      <div class="viewer-toolbar">
+        <div><i></i><i></i><i></i></div>
+        <span>{{ requested_file }}</span>
+        <span>READ ONLY</span>
+      </div>
+
+      {% if error %}
+        <div class="error-state">
+          <span>×</span>
+          <h2>Documento no disponible</h2>
+          <p>{{ error }}</p>
+        </div>
+      {% else %}
+        <pre>{{ content }}</pre>
+      {% endif %}
+    </section>
+
+    <footer>
+      <span>ASTER RECORDS DIVISION</span>
+      <span>Las solicitudes de archivos quedan registradas.</span>
+    </footer>
+  </main>
+</div>
+{% endblock %}

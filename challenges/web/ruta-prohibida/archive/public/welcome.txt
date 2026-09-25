@@ -1,0 +1,12 @@
+ASTER RECORDS DIVISION
+======================
+
+Bienvenido al nodo documental 03.
+
+Este servicio permite consultar informes de texto almacenados en el archivo
+público. El parámetro "view" indica al resolver qué recurso debe abrir.
+
+Los documentos clasificados se almacenan fuera del directorio público y no
+deben estar disponibles desde este visor.
+
+-- Records Operations

@@ -1,0 +1,35 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "ConfigGate"
+author: "Chronos Red Team"
+category: "web"
+description: |
+  ConfigGate es un portal interno que recibe archivos de configuración.
+  
+  Una validación incompleta y una configuración insegura del servidor podrían permitir que un archivo subido se procese de una forma imprevista y permita escalar privilegios en el sistema.
+  
+  **Objetivos:** Encontrar la bandera de usuario (`/home/analyst/user.txt`) o la de administrador (`/root/root.txt`).
+  
+  **Servicio expuesto:** `http://<TARGET_IP>:9000`
+
+value: 500
+type: standard
+
+extra:
+  difficulty: "medium"
+
+flags:
+  - FLAG{configgate_upload_6e21}
+  - FLAG{configgate_path_hijack_91ad}
+  - CHRONOS{configgate_upload_6e21}
+  - CHRONOS{configgate_path_hijack_91ad}
+
+tags:
+  - web
+  - file-upload
+  - privesc
+  - suid
+
+state: visible

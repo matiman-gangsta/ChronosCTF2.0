@@ -1,0 +1,32 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "Inyección Clásica"
+author: "Chronos Web Team"
+category: "web"
+description: |
+  Hemos interceptado un portal interno de autenticación para empleados de nivel directivo.
+  
+  Los desarrolladores confían ciegamente en que las sentencias SQL internas son completamente seguras y no requieren validación de entradas.
+  
+  Demuestra que es posible evadir el control de inicio de sesión e ingresar como el usuario `admin` para obtener la bandera.
+  
+  **Servicio expuesto:** `http://<TARGET_IP>:8009`
+
+value: 300
+type: standard
+
+extra:
+  difficulty: "easy"
+
+flags:
+  - CHRONOS{sqli_bypass_tautology_login_6406}
+
+tags:
+  - web
+  - sqli
+  - authentication-bypass
+  - sqlite
+
+state: visible

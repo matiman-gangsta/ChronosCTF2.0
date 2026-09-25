@@ -1,0 +1,10 @@
+services:
+  inyeccion-clasica:
+    build: .
+    container_name: chronos_challenge_inyeccion_clasica
+    ports:
+      - "8009:5000"
+    environment:
+      FLAG: "CHRONOS{sqli_bypass_tautology_login_6406}"
+      SECRET_KEY: "chronos_secret_key_inyeccion_clasica_2026"
+    restart: unless-stopped

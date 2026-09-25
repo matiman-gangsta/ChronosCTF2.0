@@ -1,0 +1,36 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "Nightfall"
+author: "Chronos Red Team"
+category: "web"
+description: |
+  Nightfall es un pequeño portal de archivos y operaciones. La aplicación pública anuncia que el equipo se trasladó a otro virtual host, pero las protecciones de la consola no están implementadas de forma consistente.
+  
+  Explora el virtual host de la consola, evade los controles de ruta para extraer credenciales SSH y escala privilegios a root en el sistema.
+  
+  **Objetivos:** Encontrar la bandera de usuario (`/home/archivist/user.txt`) o la de administrador (`/root/root.txt`).
+  
+  **Servicio expuesto:** `http://<TARGET_IP>:9001` (SSH en puerto `2222`)
+
+value: 500
+type: standard
+
+extra:
+  difficulty: "hard"
+
+flags:
+  - FLAG{nightfall_ssh_path_4b7a}
+  - FLAG{nightfall_ab_shadow_90c2}
+  - CHRONOS{nightfall_ssh_path_4b7a}
+  - CHRONOS{nightfall_ab_shadow_90c2}
+
+tags:
+  - web
+  - virtual-host
+  - lfi
+  - ssh
+  - suid
+
+state: visible

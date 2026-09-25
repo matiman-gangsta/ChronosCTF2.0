@@ -1,0 +1,15 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Enforce LF line endings for shell scripts and docker entrypoints
+*.sh text eol=lf
+Dockerfile text eol=lf
+
+# Standard text files
+*.py text
+*.yml text
+*.yaml text
+*.md text
+*.json text
+*.tf text
+*.conf text

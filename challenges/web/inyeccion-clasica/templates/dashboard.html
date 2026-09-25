@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Panel | Northstar{% endblock %}
+{% block content %}
+<section class="dashboard">
+  <nav>
+    <div class="brand"><span class="brand-mark">N</span> NORTHSTAR</div>
+    <form method="post" action="{{ url_for('logout') }}">
+      <button class="link-button" type="submit">Cerrar sesión</button>
+    </form>
+  </nav>
+
+  <div class="panel-heading">
+    <p class="eyebrow">SECURE OPERATIONS CONSOLE</p>
+    <h1>Hola, {{ display_name }}.</h1>
+    <p class="muted">Sesión activa como <code>{{ username }}</code> · nivel <code>{{ role }}</code></p>
+  </div>
+
+  {% if flag %}
+    <article class="flag-card">
+      <div class="lock-icon">◇</div>
+      <div>
+        <p class="eyebrow">ADMINISTRATOR VAULT // UNLOCKED</p>
+        <h2>Acceso concedido</h2>
+        <p>Has comprometido la cuenta privilegiada. Esta es tu flag:</p>
+        <code class="flag">{{ flag }}</code>
+      </div>
+    </article>
+  {% else %}
+    <article class="denied-card">
+      <p class="eyebrow">STANDARD USER SESSION</p>
+      <h2>Área restringida</h2>
+      <p>La bóveda solo está disponible para cuentas con rol de administrador.</p>
+    </article>
+  {% endif %}
+</section>
+{% endblock %}
