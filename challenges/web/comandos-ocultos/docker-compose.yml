@@ -1,9 +1,9 @@
 services:
-  inyeccion-clasica:
+  comandos-ocultos:
     build: .
-    container_name: chronos_challenge_inyeccion_clasica
+    container_name: chronos_challenge_comandos_ocultos
     ports:
-      - "8009:5000"
+      - "8005:5000"
     restart: unless-stopped
     deploy:
       resources:

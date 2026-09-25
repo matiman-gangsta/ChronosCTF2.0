@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!preg_match('/^[A-Za-z0-9._-]{1,64}$/', $originalName)) {
             $error = 'El nombre contiene caracteres no permitidos.';
+        } elseif ($_FILES['upload']['size'] > 200000) {
+            $error = 'El archivo supera el tamaño máximo permitido (200 KB).';
         } else {
             $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
             $blockedExtensions = [

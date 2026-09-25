@@ -12,6 +12,8 @@ COPY apache/configgate.conf /etc/apache2/conf-available/configgate.conf
 COPY src/ /var/www/html/
 COPY --from=builder /build/report-helper /usr/local/bin/report-helper
 
+COPY start-configgate.sh /usr/local/bin/start-configgate.sh
+
 RUN a2enconf configgate \
     && useradd -m -s /bin/bash analyst \
     && printf '%s\n' 'FLAG{configgate_upload_6e21}' > /home/analyst/user.txt \
@@ -22,8 +24,9 @@ RUN a2enconf configgate \
     && chmod 644 /home/analyst/user.txt \
     && chmod 600 /root/root.txt \
     && chown root:root /usr/local/bin/report-helper \
-    && chmod 4755 /usr/local/bin/report-helper
+    && chmod 4755 /usr/local/bin/report-helper \
+    && chmod +x /usr/local/bin/start-configgate.sh
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["/usr/local/bin/start-configgate.sh"]

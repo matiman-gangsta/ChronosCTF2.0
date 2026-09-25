@@ -15,7 +15,9 @@ COPY app.py flag.txt ./
 COPY templates ./templates
 COPY static ./static
 COPY archive ./archive
-RUN chown -R ctf:ctf /app && chmod 0444 /app/flag.txt
+RUN chown -R root:root /app && \
+    chmod 755 /app && \
+    chmod 444 /app/flag.txt /app/app.py
 
 USER ctf
 EXPOSE 5000

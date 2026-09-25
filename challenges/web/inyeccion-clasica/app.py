@@ -12,8 +12,15 @@ FLAG = os.getenv("FLAG", "CHRONOS{sqli_bypass_tautology_login_6406}")
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    
+    # Prevenir falsificación de cookies de sesión: si no se especifica una clave
+    # o si se usa el valor de demostración, se genera una clave criptográfica aleatoria.
+    configured_secret = os.getenv("SECRET_KEY")
+    if not configured_secret or configured_secret == "chronos_secret_key_inyeccion_clasica_2026":
+        configured_secret = os.urandom(32).hex()
+
     app.config.from_mapping(
-        SECRET_KEY=os.getenv("SECRET_KEY", "change-this-key-in-production"),
+        SECRET_KEY=configured_secret,
         DATABASE=str(DATABASE),
     )
 

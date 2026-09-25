@@ -5,3 +5,9 @@ services:
     ports:
       - "8010:5000"
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 128M
+    pids_limit: 50

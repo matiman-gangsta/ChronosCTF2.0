@@ -30,9 +30,11 @@ RUN echo "CHRONOS{w4f_byp4ss_ifs_4nd_w1ldc4rds_8842}" > /flag && \
     chown root:root /flag && \
     chmod 444 /flag
 
-# Copiar código de la aplicación y asignar propiedad
+# Copiar código de la aplicación y asignar propiedad (solo lectura para ctf)
 COPY src/ .
-RUN chown -R ctf:ctf /app
+RUN chown -R root:root /app && \
+    chmod 755 /app && \
+    chmod 444 /app/*
 
 # Ejecutar como usuario no-root obligatorio
 USER ctf

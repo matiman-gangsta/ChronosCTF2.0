@@ -15,7 +15,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY templates ./templates
 COPY static ./static
-RUN mkdir -p /app/data && chown -R ctf:ctf /app
+RUN mkdir -p /app/data && \
+    chown -R root:root /app && \
+    chown -R ctf:ctf /app/data && \
+    chmod 755 /app && \
+    chmod 770 /app/data && \
+    chmod 444 /app/app.py
 
 USER ctf
 EXPOSE 5000
