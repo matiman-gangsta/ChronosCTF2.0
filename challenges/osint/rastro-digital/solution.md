@@ -5,7 +5,7 @@
 | **Categoría** | OSINT / Git Forensics |
 | **Dificultad** | Fácil (Easy) |
 | **Puntos** | 300 |
-| **Flag** | `FLAG{git_commit_history_never_dies_1636}` |
+| **Flag** | `CHRONOS{git_commit_history_never_dies_1636}` (o `FLAG{...}`) |
 
 ---
 
@@ -45,5 +45,6 @@ Al revisar las diferencias (`diff`) de los commits antiguos, se evidencia una mo
 
 **Bandera:**
 ```text
-FLAG{git_commit_history_never_dies_1636}
+CHRONOS{git_commit_history_never_dies_1636}
+(o alternativamente: FLAG{git_commit_history_never_dies_1636})
 ```

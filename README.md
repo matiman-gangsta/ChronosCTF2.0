@@ -1,9 +1,9 @@
 # 🛡️ ChronosCTF 2026 - Plataforma de Infraestructura & Retos
 
-[![Terraform CI/CD](https://img.shields.io/badge/IaC-Terraform_1.7+-7B42BC?logo=terraform&logoColor=white)](file:///c:/Users/Usuario/OneDrive%20-%20miuandes.cl/Escritorio/ChronosCTF%202.0/terraform)
-[![Azure for Students](https://img.shields.io/badge/Cloud-Azure_($100_Budget)-0089D6?logo=microsoftazure&logoColor=white)](file:///c:/Users/Usuario/OneDrive%20-%20miuandes.cl/Escritorio/ChronosCTF%202.0/.antigravity/rules.md)
-[![Docker Hardened](https://img.shields.io/badge/Security-Non--Root_Docker-2496ED?logo=docker&logoColor=white)](file:///c:/Users/Usuario/OneDrive%20-%20miuandes.cl/Escritorio/ChronosCTF%202.0/challenges)
-[![CI/CD Pipelines](https://img.shields.io/badge/GitHub_Actions-OIDC_Auth-2088FF?logo=githubactions&logoColor=white)](file:///c:/Users/Usuario/OneDrive%20-%20miuandes.cl/Escritorio/ChronosCTF%202.0/.github/workflows)
+[![Terraform CI/CD](https://img.shields.io/badge/IaC-Terraform_1.7+-7B42BC?logo=terraform&logoColor=white)](terraform/)
+[![Azure for Students](https://img.shields.io/badge/Cloud-Azure_($100_Budget)-0089D6?logo=microsoftazure&logoColor=white)](.antigravity/rules.md)
+[![Docker Hardened](https://img.shields.io/badge/Security-Non--Root_Docker-2496ED?logo=docker&logoColor=white)](challenges/)
+[![CI/CD Pipelines](https://img.shields.io/badge/GitHub_Actions-OIDC_Auth-2088FF?logo=githubactions&logoColor=white)](.github/workflows/)
 
 Repositorio centralizado para el aprovisionamiento automatizado, despliegue continuo y desarrollo de desafíos del torneo universitario de ciberseguridad **ChronosCTF 2026**.
 
@@ -36,10 +36,10 @@ La arquitectura está concebida bajo principios rigurosos de **FinOps** para ope
                     │  │                                           │  │
                     │  │   ┌─────────────────────────────────────┐ │  │
                     │  │   │ VM Ubuntu 24.04 (Standard_B2s)      │ │  │
-                    │  │   │  - CTFd (Plataforma web)            │ │  │
-                    │  │   │  - MariaDB 10.11 (Base de datos)    │ │  │
-                    │  │   │  - Redis 7 (Caché en memoria)       │ │  │
-                    │  │   │  - Contenedores de Retos Web/Pwn    │ │  │
+                    │  │   │  - GZCTF (.NET + Vue Web App)       │ │  │
+                    │  │   │  - PostgreSQL 16 (Base de datos)    │ │  │
+                    │  │   │  - Docker Engine (/var/run/docker)  │ │  │
+                    │  │   │  - Instancias Dinámicas por Equipo  │ │  │
                     │  │   └─────────────────────────────────────┘ │  │
                     │  └───────────────────────────────────────────┘  │
                     │  ┌───────────────────────────────────────────┐  │
@@ -83,18 +83,22 @@ La arquitectura está concebida bajo principios rigurosos de **FinOps** para ope
 │       └── build-challenges.yml  # CI: Compila y valida Dockerfiles y metadatos de retos
 ├── challenges/
 │   ├── README.md                 # Guía y convenciones para creadores de retos
-│   └── web/
-│       └── _template/            # Plantilla estandarizada de reto Web
-│           ├── Dockerfile        # Multi-stage, usuario sin privilegios (no-root)
-│           ├── challenge.yml     # Metadatos para sincronización con CTFd
-│           ├── solution.md       # Writeup oficial y guía de solución
-│           ├── solution/
-│           │   └── solve.py      # Exploit automatizado de prueba
-│           └── src/
-│               ├── app.py        # Código fuente del reto
-│               └── requirements.txt
+│   ├── forense/                  # Retos de análisis forense y esteganografía
+│   │   └── el-secreto-del-logo/  # Reto: análisis de metadatos EXIF en imágenes
+│   ├── osint/                    # Retos de inteligencia de fuentes abiertas
+│   │   └── rastro-digital/       # Reto: análisis forense en historial Git
+│   └── web/                      # Desafíos web containerizados
+│       ├── _template/            # Plantilla estandarizada de reto Web (no-root)
+│       ├── comandos-ocultos/     # Reto: Command Injection con bypass de WAF
+│       ├── configgate/           # Reto: Path Hijacking & Arbitrary File Upload
+│       ├── inyeccion-clasica/    # Reto: SQL Injection en autenticación
+│       ├── nightfall/            # Reto: LFI / SSH Path traversal
+│       └── ruta-prohibida/       # Reto: Directory Traversal / Path Traversal
+├── gzctf/
+│   └── appsettings.json          # Configuración de GZCTF (Database y Docker provider)
+├── docker-compose.local.yml      # Stack local de GZCTF + PostgreSQL 16 para pruebas
 ├── scripts/
-│   └── cloud-init.sh             # Bootstrap de la VM: Docker, Compose y CTFd
+│   └── cloud-init.sh             # Bootstrap de la VM en Azure: Docker, Compose y GZCTF
 ├── terraform/
 │   ├── backend.tf                # Backend remoto Azure Blob Storage
 │   ├── providers.tf              # Configuración de azurerm y versión
@@ -165,12 +169,18 @@ Verifica la solución ejecutando:
 python solution/solve.py http://localhost:8000
 ```
 
-#### Probar la plataforma CTFd completa en local:
+#### Probar la plataforma GZCTF completa en local:
 ```bash
-mkdir -p /tmp/ctfd-local
-# Utiliza la definición provista en scripts/cloud-init.sh
-docker compose -f scripts/cloud-init.sh up -d  # o adapta docker-compose.yml
+# Levantar el stack local (GZCTF + PostgreSQL 16)
+docker compose -f docker-compose.local.yml up -d
+
+# Detener el stack local
+docker compose -f docker-compose.local.yml down
 ```
+La plataforma web estará accesible inmediatamente en tu navegador en:
+`http://localhost:8888`
+- **Usuario administrador inicial:** `Admin`
+- **Contraseña inicial:** `AdminPassword123!` (configurada en docker-compose)
 
 ---
 
@@ -213,9 +223,13 @@ Al finalizar, Terraform mostrará las salidas con la IP pública asignada:
 terraform output ssh_connection_command
 # Ejemplo: ssh azureuser@20.x.x.x
 ```
-El script `scripts/cloud-init.sh` habrá configurado automáticamente Docker, Nginx y CTFd en `/opt/ctfd`. Accede a la plataforma ingresando a `http://<VM_PUBLIC_IP>` en tu navegador.
+El script `scripts/cloud-init.sh` habrá configurado automáticamente Docker, PostgreSQL 16 y GZCTF en `/opt/gzctf`. Accede a la plataforma ingresando a `http://<VM_PUBLIC_IP>` en tu navegador.
+Para consultar las credenciales de administrador generadas automáticamente durante el bootstrap:
+```bash
+ssh azureuser@<VM_PUBLIC_IP> "sudo cat /opt/gzctf/admin_credentials.txt"
+```
 
 ---
 
 ## 🔒 5. Políticas y Reglas de Seguridad
-Consulta [.antigravity/rules.md](file:///c:/Users/Usuario/OneDrive%20-%20miuandes.cl/Escritorio/ChronosCTF%202.0/.antigravity/rules.md) para conocer las políticas obligatorias sobre no-root, multi-stage y límites de recursos cgroups.
+Consulta [.antigravity/rules.md](.antigravity/rules.md) para conocer las políticas obligatorias sobre no-root, multi-stage y límites de recursos cgroups.

@@ -1,60 +1,45 @@
 services:
-  ctfd:
-    image: ctfd/ctfd:3.7.5
-    container_name: chronos_ctfd_local
+  gzctf:
+    image: gztime/gzctf:latest
+    container_name: chronos_gzctf_local
     restart: always
     environment:
-      - UPLOAD_FOLDER=/var/uploads
-      - DATABASE_URL=mysql+pymysql://ctfd:ctfd_local_password@db/ctfd
-      - REDIS_URL=redis://cache:6379
-      - SECRET_KEY=local_development_secret_key_12345
-      - REVERSE_PROXY=true
-    volumes:
-      - ctfd_uploads:/var/uploads
+      - GZCTF_ADMIN_PASSWORD=AdminPassword123!
     ports:
-      - "8888:8000"
+      - "8888:8080"
+    volumes:
+      - ./gzctf/appsettings.json:/app/appsettings.json:ro
+      - gzctf_files:/app/files
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - ctf_local
     depends_on:
       db:
         condition: service_healthy
-      cache:
-        condition: service_started
 
   db:
-    image: mariadb:10.11
-    container_name: chronos_db_local
+    image: postgres:16-alpine
+    container_name: chronos_postgres_local
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=ctfd_root_password
-      - MYSQL_USER=ctfd
-      - MYSQL_PASSWORD=ctfd_local_password
-      - MYSQL_DATABASE=ctfd
+      - POSTGRES_DB=gzctf
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres_local_password
     volumes:
-      - db_data:/var/lib/mysql
+      - pg_data:/var/lib/postgresql/data
     networks:
       - ctf_local
-    command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800]
     healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "ctfd", "-pctfd_local_password"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gzctf"]
       interval: 5s
       timeout: 3s
       retries: 5
 
-  cache:
-    image: redis:7-alpine
-    container_name: chronos_cache_local
-    restart: always
-    volumes:
-      - redis_data:/data
-    networks:
-      - ctf_local
-
 volumes:
-  ctfd_uploads:
-  db_data:
-  redis_data:
+  gzctf_files:
+  pg_data:
 
 networks:
   ctf_local:
-    internal: false
+    name: chronos_network_local
+    driver: bridge

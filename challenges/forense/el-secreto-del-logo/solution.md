@@ -5,7 +5,7 @@
 | **Categoría** | Forense / Metadata |
 | **Dificultad** | Fácil (Easy) |
 | **Puntos** | 200 |
-| **Flag** | `FLAG{exif_metadata_hidden_2026_0913}` |
+| **Flag** | `CHRONOS{exif_metadata_hidden_2026_0913}` (o `FLAG{...}`) |
 
 ---
 
@@ -42,5 +42,6 @@ print(re.search(r"FLAG\{[^}]+\}", data.decode("latin-1")).group(0))
 
 **Resultado:**
 ```text
-FLAG{exif_metadata_hidden_2026_0913}
+CHRONOS{exif_metadata_hidden_2026_0913}
+(o alternativamente: FLAG{exif_metadata_hidden_2026_0913})
 ```
