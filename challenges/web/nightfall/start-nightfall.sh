@@ -1,7 +1,13 @@
 #!/bin/sh
 set -eu
 
-ROOT_FLAG="${GZCTF_FLAG:-${FLAG:-FLAG{nightfall_ab_shadow_90c2}}}"
+if [ -n "${GZCTF_FLAG:-}" ]; then
+  ROOT_FLAG="$GZCTF_FLAG"
+elif [ -n "${FLAG:-}" ]; then
+  ROOT_FLAG="$FLAG"
+else
+  ROOT_FLAG="FLAG{nightfall_ab_shadow_90c2}"
+fi
 unset GZCTF_FLAG || true
 unset FLAG || true
 

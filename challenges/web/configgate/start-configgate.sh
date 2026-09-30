@@ -1,7 +1,13 @@
 #!/bin/sh
 set -eu
 
-ROOT_FLAG="${GZCTF_FLAG:-${FLAG:-FLAG{configgate_path_hijack_91ad}}}"
+if [ -n "${GZCTF_FLAG:-}" ]; then
+  ROOT_FLAG="$GZCTF_FLAG"
+elif [ -n "${FLAG:-}" ]; then
+  ROOT_FLAG="$FLAG"
+else
+  ROOT_FLAG="FLAG{configgate_path_hijack_91ad}"
+fi
 unset GZCTF_FLAG || true
 unset FLAG || true
 
