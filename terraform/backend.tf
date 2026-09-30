@@ -7,12 +7,12 @@
 #   az storage container create --name tfstate --account-name stctf2026tfstate
 # ==============================================================================
 
-terraform {
-  backend "azurerm" {
-    # resource_group_name  = "rg-ctf-tfstate"
-    # storage_account_name = "stctf2026tfstate"
-    # container_name       = "tfstate"
-    # key                  = "prod.terraform.tfstate"
-    # use_oidc             = true
-  }
-}
+# terraform {
+#   backend "azurerm" {
+#     resource_group_name  = "rg-ctf-tfstate"
+#     storage_account_name = "stctf2026tfstate"
+#     container_name       = "tfstate"
+#     key                  = "prod.terraform.tfstate"
+#     use_oidc             = true
+#   }
+# }

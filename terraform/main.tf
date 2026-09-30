@@ -80,17 +80,17 @@ resource "azurerm_network_security_group" "main" {
     destination_address_prefix = "*"
   }
 
-  # Regla 4: Rango para Retos expuestos directamente (ej. pwn / netcat / tcp)
+  # Regla 4: Rango para Retos expuestos directamente y dinámicos de Docker
   security_rule {
-    name                       = "Allow-CTF-Challenge-Ports"
-    priority                   = 130
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "8000-8100"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+    name                        = "Allow-CTF-Challenge-Ports"
+    priority                    = 130
+    direction                   = "Inbound"
+    access                      = "Allow"
+    protocol                    = "Tcp"
+    source_port_range           = "*"
+    destination_port_ranges     = ["8000-8100", "30000-65535"]
+    source_address_prefix       = "*"
+    destination_address_prefix  = "*"
   }
 }
 

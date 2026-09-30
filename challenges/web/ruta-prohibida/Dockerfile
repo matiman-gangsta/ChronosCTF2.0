@@ -15,11 +15,15 @@ COPY app.py flag.txt ./
 COPY templates ./templates
 COPY static ./static
 COPY archive ./archive
+COPY entrypoint.sh /entrypoint.sh
 RUN chown -R root:root /app && \
     chmod 755 /app && \
-    chmod 444 /app/flag.txt /app/app.py
+    chmod 444 /app/app.py && \
+    chown ctf:ctf /app/flag.txt && \
+    chmod 644 /app/flag.txt && \
+    chmod 755 /entrypoint.sh
 
 USER ctf
 EXPOSE 5000
 
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT} --workers 2 --threads 4 app:app"]
+ENTRYPOINT ["/entrypoint.sh"]

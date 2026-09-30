@@ -94,7 +94,7 @@ mkdir -p /opt/gzctf/{data/postgres,files}
 echo "[5/6] Desplegando archivo docker-compose.yml y appsettings.json para GZCTF..."
 POSTGRES_PASSWORD=$(openssl rand -hex 16)
 XOR_KEY=$(openssl rand -hex 24)
-ADMIN_PASSWORD=$(openssl rand -hex 12)
+ADMIN_PASSWORD="Chronos$(openssl rand -hex 6)!2026"
 
 # Obtener IP pública asignada a la VM para PublicEntry
 PUBLIC_IP=$(curl -s --connect-timeout 5 ifconfig.me || echo "localhost")

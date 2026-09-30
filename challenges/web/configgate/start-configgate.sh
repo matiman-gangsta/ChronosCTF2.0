@@ -1,14 +1,22 @@
 #!/bin/sh
 set -eu
 
+ROOT_FLAG="${GZCTF_FLAG:-${FLAG:-FLAG{configgate_path_hijack_91ad}}}"
+unset GZCTF_FLAG || true
+unset FLAG || true
+
+printf '%s\n' "$ROOT_FLAG" > /root/root.txt
+chmod 600 /root/root.txt
+chown root:root /root/root.txt
+
 # Auto-healing Watchdog contra interferencia o manipulación entre participantes
 (
   while true; do
     sleep 5
 
     # 1. Asegurar persistencia e integridad de las banderas oficiales
-    if [ ! -f /root/root.txt ] || [ "$(cat /root/root.txt 2>/dev/null)" != 'FLAG{configgate_path_hijack_91ad}' ]; then
-      printf '%s\n' 'FLAG{configgate_path_hijack_91ad}' > /root/root.txt
+    if [ ! -f /root/root.txt ] || [ "$(cat /root/root.txt 2>/dev/null)" != "$ROOT_FLAG" ]; then
+      printf '%s\n' "$ROOT_FLAG" > /root/root.txt
       chmod 600 /root/root.txt
       chown root:root /root/root.txt
     fi

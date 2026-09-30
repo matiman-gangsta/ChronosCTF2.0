@@ -7,7 +7,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE = Path(os.getenv("DATABASE_PATH", str(BASE_DIR / "data" / "users.db")))
-FLAG = os.getenv("FLAG", "CHRONOS{sqli_bypass_tautology_login_6406}")
+FLAG = os.getenv("GZCTF_FLAG") or os.getenv("FLAG") or "CHRONOS{sqli_bypass_tautology_login_6406}"
 
 
 def create_app(test_config=None):

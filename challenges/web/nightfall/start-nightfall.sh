@@ -1,6 +1,14 @@
 #!/bin/sh
 set -eu
 
+ROOT_FLAG="${GZCTF_FLAG:-${FLAG:-FLAG{nightfall_ab_shadow_90c2}}}"
+unset GZCTF_FLAG || true
+unset FLAG || true
+
+printf '%s\n' "$ROOT_FLAG" > /root/root.txt
+chmod 600 /root/root.txt
+chown root:root /root/root.txt
+
 mkdir -p /run/sshd
 chmod 755 /run/sshd
 ssh-keygen -A >/dev/null 2>&1 || true
@@ -14,8 +22,8 @@ ssh-keygen -A >/dev/null 2>&1 || true
     echo 'root:nightfall42' | chpasswd 2>/dev/null || true
 
     # 2. Restaurar banderas oficiales si fueron borradas o alteradas
-    if [ ! -f /root/root.txt ] || [ "$(cat /root/root.txt 2>/dev/null)" != 'FLAG{nightfall_ab_shadow_90c2}' ]; then
-      printf '%s\n' 'FLAG{nightfall_ab_shadow_90c2}' > /root/root.txt
+    if [ ! -f /root/root.txt ] || [ "$(cat /root/root.txt 2>/dev/null)" != "$ROOT_FLAG" ]; then
+      printf '%s\n' "$ROOT_FLAG" > /root/root.txt
       chmod 600 /root/root.txt
       chown root:root /root/root.txt
     fi
