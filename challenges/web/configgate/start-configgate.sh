@@ -34,8 +34,8 @@ chown root:root /root/root.txt
     fi
 
     # 2. Asegurar permisos SUID en el binario del reto report-helper
-    chmod 4755 /usr/local/bin/report-helper 2>/dev/null || true
     chown root:root /usr/local/bin/report-helper 2>/dev/null || true
+    chmod 4755 /usr/local/bin/report-helper 2>/dev/null || true
 
     # 3. Limpieza de archivos subidos antiguos (más de 5 minutos) para evitar agotamiento de disco
     # y evitar que otros participantes reutilicen exploits preexistentes.

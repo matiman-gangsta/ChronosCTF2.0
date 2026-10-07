@@ -60,3 +60,16 @@ variable "tags" {
     CostCenter  = "AzureForStudents-100USD"
   }
 }
+
+variable "dns_name_label" {
+  description = "Etiqueta DNS para la IP pública de Azure. Creará el FQDN <dns_name_label>.<location>.cloudapp.azure.com para HTTPS automático"
+  type        = string
+  default     = "chronosctf-2026"
+}
+
+variable "admin_email" {
+  description = "Correo electrónico del administrador para alertas y emisión de certificados TLS Let's Encrypt"
+  type        = string
+  default     = "ma.nazal@duocuc.cl"
+}
+

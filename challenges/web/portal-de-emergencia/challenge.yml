@@ -1,0 +1,37 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "Portal de Emergencia"
+author: "Chronos Web Team"
+category: "web"
+description: |
+  CyberCorp ha activado su portal corporativo de contingencia y respuesta a incidentes.
+  
+  Los operadores afirman que la infraestructura es completamente segura y que no hay información confidencial expuesta a usuarios no autenticados.
+  
+  ¿Serás capaz de realizar un reconocimiento básico, encontrar las rutas restringidas y recuperar la bandera de administración?
+  
+  **Servicio expuesto:** `http://<TARGET_IP>:8000`
+
+value: 100
+type: standard
+
+# Dificultad del reto: intro, easy, medium, hard, insane
+extra:
+  difficulty: "intro"
+
+# Banderas aceptadas
+flags:
+  - CHRONOS{h1dd3n_c0mm3nts_4nd_r0b0ts_txt_9182}
+
+# Temas / Etiquetas
+tags:
+  - web
+  - recon
+  - html-comments
+  - robots-txt
+  - baby
+
+# Estado del reto: visible | hidden
+state: visible

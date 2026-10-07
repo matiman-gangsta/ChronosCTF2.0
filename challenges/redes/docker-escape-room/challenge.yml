@@ -1,0 +1,55 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "Docker Escape Room"
+author: "Chronos Infra Team"
+category: "redes"
+description: |
+  Se te entrega acceso SSH a un contenedor con un usuario sin privilegios
+  (sin sudo, sin pertenecer al grupo "docker").
+  
+  Dentro de ese contenedor encontrarás un socket de Docker expuesto en
+  `/var/run/docker.sock` con permisos demasiado permisivos (`666`): una configuración
+  insegura que te permite comunicarte directamente con el daemon de Docker
+  y escapar de las restricciones del contenedor hacia el host simulado.
+
+  Conéctate por SSH:
+  ```bash
+  ssh ctfuser@<TARGET_IP> -p 2223
+  ```
+  *(contraseña: `ctf_docker_2024`)*
+
+  Encuentra la forma de usar ese socket para leer el archivo `/root/flag.txt`
+  fuera del contenedor donde iniciaste sesión.
+
+value: 300
+type: standard
+
+# Dificultad del reto: intro, easy, medium, hard, insane
+extra:
+  difficulty: "medium"
+
+flags:
+  - "CHRONOS{GUID}"
+  - "flag{GUID}"
+  - "CHRONOS{b5a96d18-38f2-4e02-9a3b-851725832a81}"
+  - "flag{b5a96d18-38f2-4e02-9a3b-851725832a81}"
+
+connection_info: "ssh ctfuser@<TARGET_IP> -p 2223"
+
+tags:
+  - redes
+  - docker
+  - privesc
+  - suid
+  - docker-socket
+  - escape
+
+hints:
+  - content: "¿Qué puedes hacer si tienes acceso de escritura a /var/run/docker.sock? Piensa en qué controla ese socket y cómo interactúa el cliente Docker con el daemon."
+    cost: 30
+  - content: "Un contenedor que puede hablar con el daemon de Docker puede solicitarle la creación de un nuevo contenedor montando la raíz del sistema ('-v /:/mnt')."
+    cost: 50
+
+state: visible

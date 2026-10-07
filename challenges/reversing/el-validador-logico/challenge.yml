@@ -1,0 +1,51 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "El Validador Lógico"
+author: "Chronos Reversing Team"
+category: "reversing"
+description: |
+  Este binario en C solicita una clave por línea de comandos y valida su
+  autenticidad mediante un algoritmo de ofuscación reversible (operaciones
+  lógicas XOR y rotaciones de bits).
+  
+  Analiza el binario en Ghidra, identifica la función de validación, invierte el
+  algoritmo para reconstruir la clave correcta y obtén la bandera que el programa
+  revela al validarla.
+
+  Se te entrega el binario `validator` (ELF de 64 bits, Linux). Ejecútalo así:
+
+  ```bash
+  ./validator <clave>
+  ```
+
+  No se requiere ningún servicio en ejecución: es un reto totalmente estático.
+
+value: 250
+type: standard
+
+# Dificultad del reto: intro, easy, medium, hard, insane
+extra:
+  difficulty: "medium"
+
+flags:
+  - "CHRONOS{GUID}"
+  - "flag{GUID}"
+  - "CHRONOS{4c8d2e1f-7b3a-4950-86c1-9e2f3a4b5c6d}"
+  - "flag{4c8d2e1f-7b3a-4950-86c1-9e2f3a4b5c6d}"
+
+files:
+  - dist/validator
+
+tags:
+  - reversing
+  - ghidra
+  - crackme
+  - c-binaries
+
+hints:
+  - content: "Inspecciona la función check_key en Ghidra: verás que cada byte pasa por un XOR con 0x5A y una rotación de bits (rotl8). La rotación es fácilmente invertible con rotr8."
+    cost: 30
+
+state: visible

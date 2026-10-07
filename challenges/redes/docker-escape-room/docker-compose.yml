@@ -1,0 +1,33 @@
+services:
+  docker-host:
+    build: ./docker-host
+    container_name: ctf-docker-host
+    privileged: true
+    environment:
+      - GZCTF_FLAG=${GZCTF_FLAG:-}
+      - FLAG=${FLAG:-}
+    networks:
+      - ctfnet
+    volumes:
+      - docker-shared:/var/run/docker-shared
+    restart: unless-stopped
+
+  challenge:
+    build: .
+    container_name: docker-escape-room
+    depends_on:
+      - docker-host
+    networks:
+      - ctfnet
+    ports:
+      - "${CHALLENGE_PORT:-2223}:22"
+    volumes:
+      - docker-shared:/var/run/docker-shared
+    restart: unless-stopped
+
+volumes:
+  docker-shared:
+
+networks:
+  ctfnet:
+    driver: bridge

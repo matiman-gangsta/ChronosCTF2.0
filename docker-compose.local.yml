@@ -1,10 +1,28 @@
 services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: chronos_caddy_local
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./gzctf/Caddyfile.local:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - ctf_local
+    depends_on:
+      - gzctf
+      - grafana
+
   gzctf:
     image: gztime/gzctf:latest
     container_name: chronos_gzctf_local
     restart: always
     environment:
       - GZCTF_ADMIN_PASSWORD=AdminPassword123!
+      - ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
     ports:
       - "8888:8080"
     volumes:
@@ -35,9 +53,68 @@ services:
       timeout: 3s
       retries: 5
 
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: chronos_grafana_local
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=AdminPassword123!
+      - GF_SERVER_ROOT_URL=https://localhost/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_ANALYTICS_REPORTING_ENABLED=false
+      - GF_ANALYTICS_CHECK_FOR_UPDATES=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./gzctf/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    networks:
+      - ctf_local
+    depends_on:
+      - prometheus
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: chronos_prometheus_local
+    restart: always
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=24h'
+    volumes:
+      - ./gzctf/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - ctf_local
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: chronos_node_exporter_local
+    restart: always
+    networks:
+      - ctf_local
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: chronos_cadvisor_local
+    restart: always
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    privileged: true
+    networks:
+      - ctf_local
+
 volumes:
   gzctf_files:
   pg_data:
+  caddy_data:
+  caddy_config:
+  grafana_data:
+  prometheus_data:
 
 networks:
   ctf_local:

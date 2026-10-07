@@ -26,6 +26,7 @@ RUN a2dissite 000-default \
     && printf '%s\n' 'FLAG{nightfall_ab_shadow_90c2}' > /root/root.txt \
     && echo 'root:nightfall42' | chpasswd \
     && chown -R archivist:archivist /home/archivist \
+    && chmod 755 /home/archivist \
     && chmod 755 /home/archivist/.ssh \
     && chmod 644 /home/archivist/.ssh/id_ed25519 \
     && chmod 600 /home/archivist/.ssh/authorized_keys \

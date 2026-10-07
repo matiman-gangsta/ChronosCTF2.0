@@ -1,0 +1,14 @@
+services:
+  portal-de-emergencia:
+    build: .
+    image: portal-de-emergencia:latest
+    container_name: chronos_challenge_portal_de_emergencia
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 128M
+    pids_limit: 50

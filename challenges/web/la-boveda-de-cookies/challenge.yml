@@ -1,0 +1,38 @@
+# ==============================================================================
+# Metadatos del Reto para CTFd (Especificación ctfcli)
+# ==============================================================================
+
+name: "La Bóveda de Cookies"
+author: "Chronos Web Team"
+category: "web"
+description: |
+  CyberVault resguarda los activos digitales más confidenciales de la corporación.
+  
+  Los ingenieros afirman haber implementado un sistema infalible de sesiones que asocia a cada empleado con su nivel de autorización. Para facilitar auditorías externas, han dejado habilitada una cuenta de cortesía para invitados.
+  
+  ¿Serás capaz de inspeccionar cómo la aplicación gestiona tu identidad, elevar tus privilegios al nivel de administrador y abrir la bóveda principal?
+  
+  **Credenciales de cortesía:** `invitado` / `invitado123`  
+  **Servicio expuesto:** `http://<TARGET_IP>:8002`
+
+value: 200
+type: standard
+
+# Dificultad del reto: intro, easy, medium, hard, insane
+extra:
+  difficulty: "easy"
+
+# Banderas aceptadas
+flags:
+  - CHRONOS{c00k13_m4n1pul4t10n_uns1gn3d_v4ult_4921}
+
+# Temas / Etiquetas
+tags:
+  - web
+  - cookies
+  - authentication
+  - privilege-escalation
+  - flask
+
+# Estado del reto: visible | hidden
+state: visible

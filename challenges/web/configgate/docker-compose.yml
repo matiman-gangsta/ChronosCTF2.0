@@ -1,6 +1,7 @@
 services:
   configgate:
     build: .
+    image: configgate:latest
     container_name: chronos_challenge_configgate
     ports:
       - "9000:80"

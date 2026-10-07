@@ -16,10 +16,9 @@ COPY templates ./templates
 COPY static ./static
 COPY archive ./archive
 COPY entrypoint.sh /entrypoint.sh
-RUN chown -R root:root /app && \
+RUN chown -R ctf:ctf /app && \
     chmod 755 /app && \
     chmod 444 /app/app.py && \
-    chown ctf:ctf /app/flag.txt && \
     chmod 644 /app/flag.txt && \
     chmod 755 /entrypoint.sh
 

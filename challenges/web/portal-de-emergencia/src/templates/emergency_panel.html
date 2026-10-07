@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberCorp - Panel de Contingencia Administrativo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #050811;
+            --terminal-bg: #090e1a;
+            --accent-green: #22c55e;
+            --border-glow: rgba(34, 197, 94, 0.3);
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .terminal-container {
+            width: 100%;
+            max-width: 720px;
+            background: var(--terminal-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(34, 197, 94, 0.12);
+        }
+
+        .terminal-header {
+            background: #0f172a;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+        }
+
+        .window-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .terminal-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .terminal-body {
+            padding: 30px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .badge-success {
+            display: inline-block;
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 18px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        p {
+            color: var(--text-dim);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .flag-box {
+            background: #020617;
+            border: 2px dashed var(--accent-green);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .flag-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+
+        .flag-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-green);
+            word-break: break-all;
+            user-select: all;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-back {
+            background: #1e293b;
+            color: #f1f5f9;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            border: 1px solid #334155;
+            transition: background 0.2s;
+        }
+
+        .btn-back:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="window-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+            </div>
+            <div class="terminal-title">admin@cybercorp-emergency-node: ~</div>
+            <div style="width: 50px;"></div>
+        </div>
+        <div class="terminal-body">
+            <span class="badge-success">● ACCESO DE ADMINISTRACIÓN CONCEDIDO</span>
+            <h2>Panel Confidencial de Contingencia</h2>
+            <p>Has descubierto la ruta administrativa oculta que fue declarada en el archivo de directivas de rastreadores (<code>robots.txt</code>). Las credenciales críticas han sido recuperadas con éxito.</p>
+            
+            <div class="flag-box">
+                <div class="flag-label">Bandera Oficial ChronosCTF</div>
+                <div class="flag-value">{{ flag }}</div>
+            </div>
+
+            <div class="actions">
+                <a href="/" class="btn-back">← Volver al Portal</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

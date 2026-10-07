@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberVault - Panel de Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #060913;
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --border-glow: rgba(56, 189, 248, 0.25);
+            --accent-cyan: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-amber: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 50% 10%, #1e1b4b 0%, var(--bg-base) 80%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .dashboard {
+            max-width: 820px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(16px);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 1px solid #475569;
+        }
+
+        .user-meta h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .role-badge {
+            display: inline-block;
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .role-admin {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent-green);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .role-guest {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        a.logout {
+            background: #ef444420;
+            color: #f87171;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            transition: background 0.2s;
+        }
+
+        a.logout:hover {
+            background: #ef444435;
+        }
+
+        .vault-box {
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .vault-locked {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px dashed #475569;
+            text-align: center;
+        }
+
+        .vault-unlocked {
+            background: rgba(2, 44, 34, 0.4);
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.2);
+            text-align: center;
+        }
+
+        .vault-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .vault-locked h2 {
+            color: var(--text-main);
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .vault-unlocked h2 {
+            color: var(--accent-green);
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .vault-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+            max-width: 580px;
+            margin: 0 auto 20px auto;
+            line-height: 1.6;
+        }
+
+        .flag-container {
+            background: #020617;
+            border: 2px dashed var(--accent-green);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #4ade80;
+            font-family: 'Fira Code', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            word-break: break-all;
+            user-select: all;
+        }
+
+        .session-inspector {
+            background: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+        }
+
+        .session-inspector h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .session-inspector pre {
+            color: #cbd5e1;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <div class="user-info">
+                <div class="avatar">👤</div>
+                <div class="user-meta">
+                    <h3>{{ user.username }}</h3>
+                    <span class="role-badge {% if user.role == 'admin' %}role-admin{% else %}role-guest{% endif %}">
+                        Rol: {{ user.role }}
+                    </span>
+                </div>
+            </div>
+            <a href="/logout" class="logout">Cerrar Sesión</a>
+        </div>
+
+        {% if is_admin %}
+            <div class="vault-box vault-unlocked">
+                <div class="vault-icon">🔓</div>
+                <h2>BÓVEDA DE MÁXIMA SEGURIDAD DESBLOQUEADA</h2>
+                <p class="vault-desc">
+                    Identidad de administrador confirmada. Has obtenido acceso exclusivo al compartimento blindado de secretos corporativos.
+                </p>
+                <div class="flag-container">
+                    {{ flag }}
+                </div>
+            </div>
+        {% else %}
+            <div class="vault-box vault-locked">
+                <div class="vault-icon">🔒</div>
+                <h2>Compartimento Restringido</h2>
+                <p class="vault-desc">
+                    Tu sesión actual tiene privilegios de <code>{{ user.role }}</code>. El compartimento principal de la bóveda requiere credenciales de nivel <code>admin</code>.
+                </p>
+            </div>
+        {% endif %}
+
+        <div class="session-inspector">
+            <h4>🔍 Diagnóstico de Sesión del Cliente (Cookie: vault_session)</h4>
+            <pre>Datos recibidos en cookie sin firma criptográfica:
+{{ raw_cookie_data }}</pre>
+        </div>
+    </div>
+</body>
+</html>

@@ -15,6 +15,11 @@ printf '%s\n' "$ROOT_FLAG" > /root/root.txt
 chmod 600 /root/root.txt
 chown root:root /root/root.txt
 
+chmod 755 /home/archivist
+printf '%s\n' "$ROOT_FLAG" > /home/archivist/user.txt
+chmod 644 /home/archivist/user.txt
+chown archivist:archivist /home/archivist/user.txt
+
 mkdir -p /run/sshd
 chmod 755 /run/sshd
 ssh-keygen -A >/dev/null 2>&1 || true
@@ -28,14 +33,16 @@ ssh-keygen -A >/dev/null 2>&1 || true
     echo 'root:nightfall42' | chpasswd 2>/dev/null || true
 
     # 2. Restaurar banderas oficiales si fueron borradas o alteradas
+    chmod 755 /home/archivist 2>/dev/null || true
+
     if [ ! -f /root/root.txt ] || [ "$(cat /root/root.txt 2>/dev/null)" != "$ROOT_FLAG" ]; then
       printf '%s\n' "$ROOT_FLAG" > /root/root.txt
       chmod 600 /root/root.txt
       chown root:root /root/root.txt
     fi
 
-    if [ ! -f /home/archivist/user.txt ] || [ "$(cat /home/archivist/user.txt 2>/dev/null)" != 'FLAG{nightfall_ssh_path_4b7a}' ]; then
-      printf '%s\n' 'FLAG{nightfall_ssh_path_4b7a}' > /home/archivist/user.txt
+    if [ ! -f /home/archivist/user.txt ] || [ "$(cat /home/archivist/user.txt 2>/dev/null)" != "$ROOT_FLAG" ]; then
+      printf '%s\n' "$ROOT_FLAG" > /home/archivist/user.txt
       chmod 644 /home/archivist/user.txt
       chown archivist:archivist /home/archivist/user.txt
     fi
@@ -50,8 +57,8 @@ ssh-keygen -A >/dev/null 2>&1 || true
     fi
 
     # 4. Asegurar permisos SUID en ApacheBench (ab)
-    chmod 4755 /usr/bin/ab 2>/dev/null || true
     chown root:root /usr/bin/ab 2>/dev/null || true
+    chmod 4755 /usr/bin/ab 2>/dev/null || true
 
     # 5. Asegurar que sshd siga activo
     if ! pgrep -x sshd >/dev/null 2>&1; then

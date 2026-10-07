@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberCorp - Portal de Emergencia y Contingencia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.85);
+            --border-color: rgba(56, 189, 248, 0.2);
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #172554 0%, var(--bg-primary) 75%);
+            color: var(--text-main);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        .brand-badge {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--accent-emerald);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-emerald);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-emerald);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(56, 189, 248, 0.5);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .card h3 {
+            color: var(--accent-cyan);
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .debug-banner {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px dashed var(--accent-amber);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 40px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: #fde68a;
+        }
+
+        .debug-banner h4 {
+            color: var(--accent-amber);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            font-size: 13px;
+            border-top: 1px solid rgba(51, 65, 85, 0.4);
+            margin-top: 80px;
+        }
+    </style>
+    <!-- ================================================================= -->
+    <!-- NOTA DE SEGURIDAD / CONSEJO PARA EL EQUIPO DE INFRAESTRUCTURA:     -->
+    <!-- En caso de contingencia mayor, recuerden que las rutas de backup   -->
+    <!-- y diagnóstico administrativo fueron restringidas en el estándar    -->
+    <!-- de rastreadores web. Consultar: /robots.txt                        -->
+    <!-- Parametro opcional de depuración soportado: ?debug=true            -->
+    <!-- ================================================================= -->
+</head>
+<body>
+    <header>
+        <div class="brand">
+            <span>⚡ CyberCorp Inc.</span>
+            <span class="brand-badge">Protocolo Contingencia</span>
+        </div>
+        <div class="status-pill">
+            <span class="pulse-dot"></span>
+            <span>SISTEMAS OPERATIVOS</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>Portal de Emergencia Corporativo</h1>
+            <p>Infraestructura de respuesta a incidentes y continuidad operacional de servicios críticos.</p>
+        </div>
+
+        {% if debug_mode %}
+        <div class="debug-banner">
+            <h4>⚠️ MODO DEPURACIÓN ACTIVADO (?debug=true)</h4>
+            <p>[INFO] Entorno de contingencia activo. Host: internal-emergency-node-01</p>
+            <p>[INFO] Las rutas restringidas de auditoría están indexadas en la directiva standard <code>/robots.txt</code>.</p>
+            <p>[INFO] Endpoint de contingencia administrativa: <code>/super-secret-admin-backup-panel</code></p>
+        </div>
+        {% endif %}
+
+        <div class="grid">
+            <div class="card">
+                <h3>🛡️ Monitoreo Perimetral</h3>
+                <p>Análisis heurístico de tráfico HTTP entrante para mitigar ataques DDoS y reconocimiento no autorizado en tiempo real.</p>
+            </div>
+            <div class="card">
+                <h3>💾 Backups Desacoplados</h3>
+                <p>Almacenamiento cifrado de snapshots corporativos aislados de la red principal durante estados de alarma.</p>
+            </div>
+            <div class="card">
+                <h3>🔐 Protocolo de Confinamiento</h3>
+                <p>Aislamiento de segmentos de red comprometidos mediante políticas estrictas de firewall de capa 7.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- PISTA DE DESARROLLADOR: 
+         Verificar que el bot de búsqueda no indexe /super-secret-admin-backup-panel 
+         antes de publicar la versión definitiva de este portal.
+    -->
+
+    <footer>
+        <p>&copy; 2026 CyberCorp Security Infrastructure. Uso exclusivo de personal autorizado.</p>
+    </footer>
+</body>
+</html>

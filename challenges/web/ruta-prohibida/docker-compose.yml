@@ -1,6 +1,7 @@
 services:
   ruta-prohibida:
     build: .
+    image: ruta-prohibida:latest
     container_name: chronos_challenge_ruta_prohibida
     ports:
       - "8010:5000"

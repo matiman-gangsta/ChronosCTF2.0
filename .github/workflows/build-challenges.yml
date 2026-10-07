@@ -44,12 +44,12 @@ jobs:
             CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD -- 'challenges/**' 2>/dev/null || find challenges -type f)
           fi
 
-          # Extraer directorios únicos que contengan un Dockerfile
+          # Extraer directorios únicos que contengan un challenge.yml
           CHALLENGE_DIRS=$(echo "$CHANGED_FILES" | grep -v '^$' | while read -r file; do
             dir=$(dirname "$file")
-            # Subir en el árbol de directorios hasta encontrar un Dockerfile
+            # Subir en el árbol de directorios hasta encontrar la raíz del reto (challenge.yml)
             while [ "$dir" != "challenges" ] && [ "$dir" != "." ]; do
-              if [ -f "$dir/Dockerfile" ]; then
+              if [ -f "$dir/challenge.yml" ]; then
                 echo "$dir"
                 break
               fi
@@ -58,7 +58,7 @@ jobs:
           done | sort -u)
 
           if [ -z "$CHALLENGE_DIRS" ]; then
-            echo "No se detectaron Dockerfiles modificados. Validando template por defecto..."
+            echo "No se detectaron retos modificados. Validando template por defecto..."
             CHALLENGE_DIRS="challenges/web/_template"
           fi
 
@@ -95,31 +95,44 @@ jobs:
               echo "✅ solution.md detectado."
             fi
 
-            # 3. Compilar imagen Docker
-            CHALLENGE_TAG=$(echo "$dir" | tr '/' '-' | tr '[:upper:]' '[:lower:]')
-            echo "🐳 Compilando imagen Docker: ctf-challenge-$CHALLENGE_TAG..."
-            
-            if docker build -t "ctf-challenge-$CHALLENGE_TAG:test" "$dir"; then
-              echo "✅ Docker build exitoso para $dir."
-            else
-              echo "❌ ERROR: Falló docker build en $dir."
-              FAILED=1
-              continue
-            fi
-
-            # 4. Validar política de seguridad: Usuario No-Root
-            IMAGE_USER=$(docker image inspect "ctf-challenge-$CHALLENGE_TAG:test" --format '{{.Config.User}}')
-            echo "🔍 Usuario configurado en contenedor: '$IMAGE_USER'"
-            if [ -z "$IMAGE_USER" ] || [ "$IMAGE_USER" = "root" ] || [ "$IMAGE_USER" = "0" ]; then
-              # Permitir excepciones si el reto está explícitamente etiquetado como privesc / suid
-              if grep -Eq '^\s*-\s*(privesc|suid)' "$dir/challenge.yml" 2>/dev/null; then
-                echo "⚠️ AVISO: Reto clasificado con etiqueta 'privesc/suid' en challenge.yml. Se permite arranque privilegiado para escalada local intencionada."
+            # 3. Validar docker-compose.yml si existe
+            if [ -f "$dir/docker-compose.yml" ]; then
+              echo "🐳 Verificando sintaxis de docker-compose.yml..."
+              if docker compose -f "$dir/docker-compose.yml" config > /dev/null; then
+                echo "✅ docker-compose.yml sintácticamente válido para $dir."
               else
-                echo "❌ ERROR DE SEGURIDAD: El contenedor en $dir no define un usuario no-root en Dockerfile (encontrado: '$IMAGE_USER')."
+                echo "❌ ERROR: docker compose config falló en $dir."
                 FAILED=1
               fi
-            else
-              echo "✅ Verificación de usuario no-root aprobada ('$IMAGE_USER')."
+            fi
+
+            # 4. Compilar imagen Docker si existe Dockerfile
+            if [ -f "$dir/Dockerfile" ]; then
+              CHALLENGE_TAG=$(echo "$dir" | tr '/' '-' | tr '[:upper:]' '[:lower:]')
+              echo "🐳 Compilando imagen Docker: ctf-challenge-$CHALLENGE_TAG..."
+              
+              if docker build -t "ctf-challenge-$CHALLENGE_TAG:test" "$dir"; then
+                echo "✅ Docker build exitoso para $dir."
+              else
+                echo "❌ ERROR: Falló docker build en $dir."
+                FAILED=1
+                continue
+              fi
+
+              # 5. Validar política de seguridad: Usuario No-Root
+              IMAGE_USER=$(docker image inspect "ctf-challenge-$CHALLENGE_TAG:test" --format '{{.Config.User}}')
+              echo "🔍 Usuario configurado en contenedor: '$IMAGE_USER'"
+              if [ -z "$IMAGE_USER" ] || [ "$IMAGE_USER" = "root" ] || [ "$IMAGE_USER" = "0" ]; then
+                # Permitir excepciones si el reto está explícitamente etiquetado como privesc / suid
+                if grep -Eq '^\s*-\s*(privesc|suid)' "$dir/challenge.yml" 2>/dev/null; then
+                  echo "⚠️ AVISO: Reto clasificado con etiqueta 'privesc/suid' en challenge.yml. Se permite arranque privilegiado para escalada local intencionada."
+                else
+                  echo "❌ ERROR DE SEGURIDAD: El contenedor en $dir no define un usuario no-root en Dockerfile (encontrado: '$IMAGE_USER')."
+                  FAILED=1
+                fi
+              else
+                echo "✅ Verificación de usuario no-root aprobada ('$IMAGE_USER')."
+              fi
             fi
 
           done <<< "${{ steps.filter.outputs.dirs }}"

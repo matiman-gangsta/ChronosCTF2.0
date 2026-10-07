@@ -1,0 +1,14 @@
+services:
+  la-boveda-de-cookies:
+    build: .
+    image: la-boveda-de-cookies:latest
+    container_name: chronos_challenge_la_boveda_de_cookies
+    ports:
+      - "8002:8000"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 128M
+    pids_limit: 50

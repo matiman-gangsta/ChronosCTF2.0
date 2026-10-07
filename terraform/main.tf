@@ -7,7 +7,12 @@ resource "azurerm_resource_group" "main" {
   name     = "rg-${var.prefix}-${var.environment}"
   location = var.location
   tags     = var.tags
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
+
 
 # Red Virtual (VNet)
 resource "azurerm_virtual_network" "main" {
@@ -82,15 +87,15 @@ resource "azurerm_network_security_group" "main" {
 
   # Regla 4: Rango para Retos expuestos directamente y dinámicos de Docker
   security_rule {
-    name                        = "Allow-CTF-Challenge-Ports"
-    priority                    = 130
-    direction                   = "Inbound"
-    access                      = "Allow"
-    protocol                    = "Tcp"
-    source_port_range           = "*"
-    destination_port_ranges     = ["8000-8100", "30000-65535"]
-    source_address_prefix       = "*"
-    destination_address_prefix  = "*"
+    name                       = "Allow-CTF-Challenge-Ports"
+    priority                   = 130
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_ranges    = ["8000-8100", "30000-65535"]
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
   }
 }
 

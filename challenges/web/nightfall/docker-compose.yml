@@ -1,6 +1,7 @@
 services:
   nightfall:
     build: .
+    image: nightfall:latest
     container_name: chronos_challenge_nightfall
     ports:
       - "9001:80"

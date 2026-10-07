@@ -9,6 +9,7 @@ resource "azurerm_public_ip" "vm_pip" {
   resource_group_name = azurerm_resource_group.main.name
   allocation_method   = "Static"
   sku                 = "Standard"
+  domain_name_label   = lower(var.dns_name_label)
   tags                = var.tags
 }
 
@@ -71,11 +72,17 @@ resource "azurerm_linux_virtual_machine" "vm" {
   identity {
     type = "SystemAssigned"
   }
+
+  lifecycle {
+    ignore_changes = [custom_data]
+  }
 }
 
-# Asignación de rol AcrPull para que la VM pueda descargar imágenes de retos de forma segura
-resource "azurerm_role_assignment" "vm_acr_pull" {
-  scope                = azurerm_container_registry.acr.id
-  role_definition_name = "AcrPull"
-  principal_id         = azurerm_linux_virtual_machine.vm.identity[0].principal_id
-}
+
+# Asignación de rol AcrPull (Deshabilitada al no utilizar ACR)
+# resource "azurerm_role_assignment" "vm_acr_pull" {
+#   scope                = azurerm_container_registry.acr.id
+#   role_definition_name = "AcrPull"
+#   principal_id         = azurerm_linux_virtual_machine.vm.identity[0].principal_id
+# }
+

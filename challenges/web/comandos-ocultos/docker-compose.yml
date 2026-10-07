@@ -1,6 +1,8 @@
+
 services:
   comandos-ocultos:
     build: .
+    image: comandos-ocultos:latest
     container_name: chronos_challenge_comandos_ocultos
     ports:
       - "8005:5000"

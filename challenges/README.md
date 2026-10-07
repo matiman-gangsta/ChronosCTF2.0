@@ -11,8 +11,9 @@ Organiza los retos dentro de su respectivo directorio por categoría:
 - `web/`: Vulnerabilidades de aplicaciones web (SQLi, Command Injection, LFI/Path Traversal, SSRF, IDOR, etc.).
 - `forense/`: Análisis de archivos, metadatos EXIF, esteganografía, capturas de red (PCAP) e imágenes de disco/memoria.
 - `osint/`: Inteligencia en fuentes abiertas, análisis de historiales Git, fugas de credenciales y footprinting.
+- `redes/`: Retos de infraestructura, servicios de red, escapes de contenedores y configuraciones inseguras.
+- `reversing/`: Ingeniería inversa (Binarios ELF/PE, APKs Android, algoritmos ofuscados, descompilación con Ghidra).
 - `pwn/`: Explotación de binarios en memoria (Buffer Overflow, ROP, Format Strings, Heap).
-- `rev/`: Ingeniería inversa (Binarios ELF/PE, APKs Android, bytecode de Python, desobfuscación).
 - `crypto/`: Criptografía moderna y clásica, fallos en curvas elípticas, debilidades en RSA, padding oracles.
 - `misc/`: Retos misceláneos, jailbreaks de LLMs, scripting y desafíos no catalogados.
 

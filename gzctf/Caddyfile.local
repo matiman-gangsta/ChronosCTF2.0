@@ -1,0 +1,16 @@
+localhost {
+    encode zstd gzip
+
+    # Redirección / Proxy de Grafana
+    handle /grafana* {
+        reverse_proxy grafana:3000
+    }
+
+    # Proxy hacia GZCTF
+    handle {
+        reverse_proxy gzctf:8080 {
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+}

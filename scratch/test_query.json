@@ -1,0 +1,15 @@
+{
+  "queries": [
+    {
+      "refId": "A",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "expr": "max(100 - ((node_filesystem_avail_bytes{fstype!~\"rootfs|tmpfs\"} * 100) / node_filesystem_size_bytes{fstype!~\"rootfs|tmpfs\"}))",
+      "instant": true
+    }
+  ],
+  "from": "now-5m",
+  "to": "now"
+}

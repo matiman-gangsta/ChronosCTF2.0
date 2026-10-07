@@ -1,6 +1,7 @@
 services:
   inyeccion-clasica:
     build: .
+    image: inyeccion-clasica:latest
     container_name: chronos_challenge_inyeccion_clasica
     ports:
       - "8009:5000"
