@@ -11,4 +11,4 @@ services:
         limits:
           cpus: '0.50'
           memory: 128M
-    pids_limit: 50
+          pids: 50
